@@ -1,2 +1,5 @@
 node_modules
 .next/
+
+.env.local        # 本地开发专用，可能写了本地数据库密码、测试账号
+.env.*.local      # 其他环境的 .local 文件

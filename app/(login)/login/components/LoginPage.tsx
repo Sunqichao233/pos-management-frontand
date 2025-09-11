@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Eye, EyeOff, Shield, HelpCircle } from 'lucide-react';
+import { loginApi } from '@/api/login';
 
 interface LoginPageProps {
   onLogin: (email: string, password: string, rememberMe: boolean) => {
@@ -23,6 +25,7 @@ interface LoginPageProps {
 }
 
 export function LoginPage({ onLogin, onNavigateToRegister, onNavigateToPasswordRecovery, failedAttempts, isLocked }: LoginPageProps) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -36,35 +39,50 @@ export function LoginPage({ onLogin, onNavigateToRegister, onNavigateToPasswordR
     e.preventDefault();
     
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError('请填写所有字段');
       return;
     }
 
     if (showCaptcha && !captchaVerified) {
-      setError('Please complete the captcha verification');
+      setError('请完成验证码验证');
       return;
     }
 
     setIsLoading(true);
     setError('');
 
-    // 模拟 API 延迟
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      // 调用真实的登录API
+      const data = await loginApi.login({
+        email,
+        password,
+        rememberMe
+      });
 
-    const result = onLogin(email, password, rememberMe);
-    
-    if (!result.success) {
-      if (result.requiresRiskControl) {
-        // Don't set error, just let the redirect happen
-        return;
+      if (data.token) {
+        // 登录成功，跳转到主页面
+        console.log('登录成功:', data);
+        router.push('/dashboard');
+      } else {
+        setError(data.message || '登录失败');
       }
-      setError(result.error || 'Login failed');
-      if (result.requiresCaptcha) {
+    } catch (error: any) {
+      console.error('登录错误:', error);
+      
+      // 处理不同类型的错误
+      if (error.response?.status === 401) {
+        setError('邮箱或密码错误');
+      } else if (error.response?.status === 429) {
+        setError('登录尝试次数过多，请稍后再试');
         setShowCaptcha(true);
+      } else if (error.response?.status === 423) {
+        setError('账户已被锁定，请联系客服');
+      } else {
+        setError(error.message || '网络错误，请稍后重试');
       }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleCaptchaVerify = () => {
