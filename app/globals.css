@@ -60,7 +60,7 @@
   html, body { 
     @apply bg-background text-foreground; 
     height: 100vh;
-    overflow: hidden;
+    overflow: auto;
     margin: 0;
     padding: 0;
     font-size: 16px;
