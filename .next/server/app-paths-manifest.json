@@ -1,7 +1,6 @@
 {
-  "/dashboard/setting/device-management/terminal-code/page": "app/dashboard/setting/device-management/terminal-code/page.js",
-  "/dashboard/home/page": "app/dashboard/home/page.js",
   "/dashboard/products-and-services/menu/page": "app/dashboard/products-and-services/menu/page.js",
-  "/dashboard/report/sales-trends/page": "app/dashboard/report/sales-trends/page.js",
-  "/dashboard/bank/page": "app/dashboard/bank/page.js"
+  "/dashboard/home/page": "app/dashboard/home/page.js",
+  "/dashboard/setting/device-management/terminal-code/page": "app/dashboard/setting/device-management/terminal-code/page.js",
+  "/dashboard/report/sales-trends/page": "app/dashboard/report/sales-trends/page.js"
 }

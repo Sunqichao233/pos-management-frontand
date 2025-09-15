@@ -28,28 +28,10 @@ declare namespace __next_route_internal_types__ {
   type OptionalCatchAllSlug<S extends string> =
     S extends `${string}${SearchOrHash}` ? never : S
 
-  type StaticRoutes = 
-    | `/`
-    | `/login`
-    | `/dashboard/bank`
-    | `/dashboard/home`
-    | `/dashboard/report/sales-trends`
-    | `/dashboard/products-and-services/merchandise/test`
-    | `/dashboard/products-and-services/menu`
-    | `/dashboard/products-and-services/inventory-management/history`
-    | `/dashboard/products-and-services/inventory-management/business-partners`
-    | `/dashboard/setting/account-and-settings/test`
-    | `/dashboard/setting/device-management/terminal`
-    | `/dashboard/setting/device-management/terminal-code`
+  type StaticRoutes = never
   type DynamicRoutes<T extends string = string> = never
 
-  type RouteImpl<T> = 
-    | StaticRoutes
-    | SearchOrHash
-    | WithProtocol
-    | `${StaticRoutes}${SearchOrHash}`
-    | (T extends `${DynamicRoutes<infer _>}${Suffix}` ? T : never)
-    
+  type RouteImpl<T> = string
 }
 
 declare module 'next' {

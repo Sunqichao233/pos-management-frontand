@@ -56,6 +56,137 @@ module.exports = require("next/dist/compiled/next-server/app-page.runtime.dev.js
 
 /***/ }),
 
+/***/ "assert":
+/*!*************************!*\
+  !*** external "assert" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("assert");
+
+/***/ }),
+
+/***/ "crypto":
+/*!*************************!*\
+  !*** external "crypto" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("crypto");
+
+/***/ }),
+
+/***/ "events":
+/*!*************************!*\
+  !*** external "events" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ "https":
+/*!************************!*\
+  !*** external "https" ***!
+  \************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("path");
+
+/***/ }),
+
+/***/ "stream":
+/*!*************************!*\
+  !*** external "stream" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
+
+/***/ }),
+
+/***/ "url":
+/*!**********************!*\
+  !*** external "url" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("url");
+
+/***/ }),
+
+/***/ "util":
+/*!***********************!*\
+  !*** external "util" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("util");
+
+/***/ }),
+
+/***/ "zlib":
+/*!***********************!*\
+  !*** external "zlib" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
+
+/***/ }),
+
+/***/ "?4c03":
+/*!***********************!*\
+  !*** debug (ignored) ***!
+  \***********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
 /***/ "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&page=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&appPaths=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&pagePath=private-next-app-dir%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage.tsx&appDir=E%3A%5Cpos-front%5Cpos-management-frontand%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=E%3A%5Cpos-front%5Cpos-management-frontand&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&page=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&appPaths=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&pagePath=private-next-app-dir%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage.tsx&appDir=E%3A%5Cpos-front%5Cpos-management-frontand%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=E%3A%5Cpos-front%5Cpos-management-frontand&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D! ***!
@@ -367,7 +498,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   cn: () => (/* binding */ cn)\n/* harmony export */ });\n/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clsx */ \"(ssr)/./node_modules/clsx/dist/clsx.mjs\");\n/* harmony import */ var tailwind_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tailwind-merge */ \"(ssr)/./node_modules/tailwind-merge/dist/bundle-mjs.mjs\");\n\n\nfunction cn(...inputs) {\n    return (0,tailwind_merge__WEBPACK_IMPORTED_MODULE_1__.twMerge)((0,clsx__WEBPACK_IMPORTED_MODULE_0__.clsx)(inputs));\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9saWIvdXRpbHMudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQzJCO0FBQ2E7QUFDakMsU0FBU0UsR0FBRyxHQUFHQyxNQUFvQjtJQUFJLE9BQU9GLHVEQUFPQSxDQUFDRCwwQ0FBSUEsQ0FBQ0c7QUFBUyIsInNvdXJjZXMiOlsid2VicGFjazovL25leHQtc2hhZGNuLWFwcC1yb3V0ZXItc3RhcnRlci8uL2xpYi91dGlscy50cz9mNzQ1Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHR5cGUgQ2xhc3NWYWx1ZSB9IGZyb20gXCJjbHN4XCJcclxuaW1wb3J0IHsgY2xzeCB9IGZyb20gXCJjbHN4XCJcclxuaW1wb3J0IHsgdHdNZXJnZSB9IGZyb20gXCJ0YWlsd2luZC1tZXJnZVwiXHJcbmV4cG9ydCBmdW5jdGlvbiBjbiguLi5pbnB1dHM6IENsYXNzVmFsdWVbXSkgeyByZXR1cm4gdHdNZXJnZShjbHN4KGlucHV0cykpIH1cclxuIl0sIm5hbWVzIjpbImNsc3giLCJ0d01lcmdlIiwiY24iLCJpbnB1dHMiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./lib/utils.ts\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   cn: () => (/* binding */ cn),\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clsx */ \"(ssr)/./node_modules/clsx/dist/clsx.mjs\");\n/* harmony import */ var tailwind_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tailwind-merge */ \"(ssr)/./node_modules/tailwind-merge/dist/bundle-mjs.mjs\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ \"(ssr)/./node_modules/axios/lib/axios.js\");\n\n\n\nfunction cn(...inputs) {\n    return (0,tailwind_merge__WEBPACK_IMPORTED_MODULE_1__.twMerge)((0,clsx__WEBPACK_IMPORTED_MODULE_0__.clsx)(inputs));\n}\n// API请求工具\nconst api = axios__WEBPACK_IMPORTED_MODULE_2__[\"default\"].create({\n    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,\n    timeout: 10000\n});\n// 请求拦截器\napi.interceptors.request.use((config)=>{\n    // 统一加 token\n    const token = localStorage.getItem(\"token\");\n    if (token) {\n        config.headers.Authorization = `Bearer ${token}`;\n    }\n    return config;\n}, (error)=>Promise.reject(error));\n// 响应拦截器\napi.interceptors.response.use((response)=>response.data, (error)=>{\n    // 统一错误处理\n    if (error.response?.status === 401) {\n        window.location.href = \"/login\";\n    }\n    return Promise.reject(error);\n});\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (api);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9saWIvdXRpbHMudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBNEM7QUFDSjtBQUNkO0FBRW5CLFNBQVNHLEdBQUcsR0FBR0MsTUFBb0I7SUFDeEMsT0FBT0gsdURBQU9BLENBQUNELDBDQUFJQSxDQUFDSTtBQUN0QjtBQUVBLFVBQVU7QUFDVixNQUFNQyxNQUFNSCw2Q0FBS0EsQ0FBQ0ksTUFBTSxDQUFDO0lBQ3ZCQyxTQUFTQyxRQUFRQyxHQUFHLENBQUNDLHdCQUF3QjtJQUM3Q0MsU0FBUztBQUNYO0FBRUEsUUFBUTtBQUNSTixJQUFJTyxZQUFZLENBQUNDLE9BQU8sQ0FBQ0MsR0FBRyxDQUMxQixDQUFDQztJQUNDLFlBQVk7SUFDWixNQUFNQyxRQUFRQyxhQUFhQyxPQUFPLENBQUM7SUFDbkMsSUFBSUYsT0FBTztRQUNURCxPQUFPSSxPQUFPLENBQUNDLGFBQWEsR0FBRyxDQUFDLE9BQU8sRUFBRUosTUFBTSxDQUFDO0lBQ2xEO0lBQ0EsT0FBT0Q7QUFDVCxHQUNBLENBQUNNLFFBQVVDLFFBQVFDLE1BQU0sQ0FBQ0Y7QUFHNUIsUUFBUTtBQUNSaEIsSUFBSU8sWUFBWSxDQUFDWSxRQUFRLENBQUNWLEdBQUcsQ0FDM0IsQ0FBQ1UsV0FBYUEsU0FBU0MsSUFBSSxFQUMzQixDQUFDSjtJQUNDLFNBQVM7SUFDVCxJQUFJQSxNQUFNRyxRQUFRLEVBQUVFLFdBQVcsS0FBSztRQUNsQ0MsT0FBT0MsUUFBUSxDQUFDQyxJQUFJLEdBQUc7SUFDekI7SUFDQSxPQUFPUCxRQUFRQyxNQUFNLENBQUNGO0FBQ3hCO0FBR0YsaUVBQWVoQixHQUFHQSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vbmV4dC1zaGFkY24tYXBwLXJvdXRlci1zdGFydGVyLy4vbGliL3V0aWxzLnRzP2Y3NDUiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgY2xzeCwgdHlwZSBDbGFzc1ZhbHVlIH0gZnJvbSBcImNsc3hcIlxyXG5pbXBvcnQgeyB0d01lcmdlIH0gZnJvbSBcInRhaWx3aW5kLW1lcmdlXCJcclxuaW1wb3J0IGF4aW9zIGZyb20gXCJheGlvc1wiO1xyXG5cclxuZXhwb3J0IGZ1bmN0aW9uIGNuKC4uLmlucHV0czogQ2xhc3NWYWx1ZVtdKSB7XHJcbiAgcmV0dXJuIHR3TWVyZ2UoY2xzeChpbnB1dHMpKVxyXG59XHJcblxyXG4vLyBBUEnor7fmsYLlt6XlhbdcclxuY29uc3QgYXBpID0gYXhpb3MuY3JlYXRlKHtcclxuICBiYXNlVVJMOiBwcm9jZXNzLmVudi5ORVhUX1BVQkxJQ19BUElfQkFTRV9VUkwsXHJcbiAgdGltZW91dDogMTAwMDAsIC8vIOi2heaXtuaXtumXtO+8jOmBv+WFjeS4gOebtOWNoeS9j1xyXG59KTtcclxuXHJcbi8vIOivt+axguaLpuaIquWZqFxyXG5hcGkuaW50ZXJjZXB0b3JzLnJlcXVlc3QudXNlKFxyXG4gIChjb25maWcpID0+IHtcclxuICAgIC8vIOe7n+S4gOWKoCB0b2tlblxyXG4gICAgY29uc3QgdG9rZW4gPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbShcInRva2VuXCIpO1xyXG4gICAgaWYgKHRva2VuKSB7XHJcbiAgICAgIGNvbmZpZy5oZWFkZXJzLkF1dGhvcml6YXRpb24gPSBgQmVhcmVyICR7dG9rZW59YDtcclxuICAgIH1cclxuICAgIHJldHVybiBjb25maWc7XHJcbiAgfSxcclxuICAoZXJyb3IpID0+IFByb21pc2UucmVqZWN0KGVycm9yKVxyXG4pO1xyXG5cclxuLy8g5ZON5bqU5oum5oiq5ZmoXHJcbmFwaS5pbnRlcmNlcHRvcnMucmVzcG9uc2UudXNlKFxyXG4gIChyZXNwb25zZSkgPT4gcmVzcG9uc2UuZGF0YSxcclxuICAoZXJyb3IpID0+IHtcclxuICAgIC8vIOe7n+S4gOmUmeivr+WkhOeQhlxyXG4gICAgaWYgKGVycm9yLnJlc3BvbnNlPy5zdGF0dXMgPT09IDQwMSkge1xyXG4gICAgICB3aW5kb3cubG9jYXRpb24uaHJlZiA9IFwiL2xvZ2luXCI7XHJcbiAgICB9XHJcbiAgICByZXR1cm4gUHJvbWlzZS5yZWplY3QoZXJyb3IpO1xyXG4gIH1cclxuKTtcclxuXHJcbmV4cG9ydCBkZWZhdWx0IGFwaTtcclxuIl0sIm5hbWVzIjpbImNsc3giLCJ0d01lcmdlIiwiYXhpb3MiLCJjbiIsImlucHV0cyIsImFwaSIsImNyZWF0ZSIsImJhc2VVUkwiLCJwcm9jZXNzIiwiZW52IiwiTkVYVF9QVUJMSUNfQVBJX0JBU0VfVVJMIiwidGltZW91dCIsImludGVyY2VwdG9ycyIsInJlcXVlc3QiLCJ1c2UiLCJjb25maWciLCJ0b2tlbiIsImxvY2FsU3RvcmFnZSIsImdldEl0ZW0iLCJoZWFkZXJzIiwiQXV0aG9yaXphdGlvbiIsImVycm9yIiwiUHJvbWlzZSIsInJlamVjdCIsInJlc3BvbnNlIiwiZGF0YSIsInN0YXR1cyIsIndpbmRvdyIsImxvY2F0aW9uIiwiaHJlZiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(ssr)/./lib/utils.ts\n");
 
 /***/ }),
 
@@ -378,7 +509,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (\"94caa1bcdb6b\");\nif (false) {}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9hcHAvZ2xvYmFscy5jc3MiLCJtYXBwaW5ncyI6Ijs7OztBQUFBLGlFQUFlLGNBQWM7QUFDN0IsSUFBSSxLQUFVLEVBQUUsRUFBdUIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9uZXh0LXNoYWRjbi1hcHAtcm91dGVyLXN0YXJ0ZXIvLi9hcHAvZ2xvYmFscy5jc3M/YWEzZSJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBcIjk0Y2FhMWJjZGI2YlwiXG5pZiAobW9kdWxlLmhvdCkgeyBtb2R1bGUuaG90LmFjY2VwdCgpIH1cbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(rsc)/./app/globals.css\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (\"a6d7043ea706\");\nif (false) {}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9hcHAvZ2xvYmFscy5jc3MiLCJtYXBwaW5ncyI6Ijs7OztBQUFBLGlFQUFlLGNBQWM7QUFDN0IsSUFBSSxLQUFVLEVBQUUsRUFBdUIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9uZXh0LXNoYWRjbi1hcHAtcm91dGVyLXN0YXJ0ZXIvLi9hcHAvZ2xvYmFscy5jc3M/YWEzZSJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBcImE2ZDcwNDNlYTcwNlwiXG5pZiAobW9kdWxlLmhvdCkgeyBtb2R1bGUuaG90LmFjY2VwdCgpIH1cbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(rsc)/./app/globals.css\n");
 
 /***/ }),
 
@@ -418,7 +549,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ RootLayout),\n/* harmony export */   metadata: () => (/* binding */ metadata)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _globals_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./globals.css */ \"(rsc)/./app/globals.css\");\n\n\nconst metadata = {\n    title: \"Next + shadcn/ui Starter\",\n    description: \"App Router + Tailwind + shadcn/ui\"\n};\nfunction RootLayout({ children }) {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"html\", {\n        lang: \"zh-CN\",\n        suppressHydrationWarning: true,\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"body\", {\n            className: \"min-h-screen bg-background font-sans antialiased\",\n            children: children\n        }, void 0, false, {\n            fileName: \"E:\\\\pos-front\\\\pos-management-frontand\\\\app\\\\layout.tsx\",\n            lineNumber: 12,\n            columnNumber: 7\n        }, this)\n    }, void 0, false, {\n        fileName: \"E:\\\\pos-front\\\\pos-management-frontand\\\\app\\\\layout.tsx\",\n        lineNumber: 11,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9hcHAvbGF5b3V0LnRzeCIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7QUFDc0I7QUFFZixNQUFNQSxXQUFxQjtJQUNoQ0MsT0FBTztJQUNQQyxhQUFhO0FBQ2YsRUFBQztBQUVjLFNBQVNDLFdBQVcsRUFBRUMsUUFBUSxFQUFpQztJQUM1RSxxQkFDRSw4REFBQ0M7UUFBS0MsTUFBSztRQUFRQyx3QkFBd0I7a0JBQ3pDLDRFQUFDQztZQUFLQyxXQUFVO3NCQUNiTDs7Ozs7Ozs7Ozs7QUFJVCIsInNvdXJjZXMiOlsid2VicGFjazovL25leHQtc2hhZGNuLWFwcC1yb3V0ZXItc3RhcnRlci8uL2FwcC9sYXlvdXQudHN4Pzk5ODgiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gXCJuZXh0XCJcclxuaW1wb3J0IFwiLi9nbG9iYWxzLmNzc1wiXHJcblxyXG5leHBvcnQgY29uc3QgbWV0YWRhdGE6IE1ldGFkYXRhID0ge1xyXG4gIHRpdGxlOiBcIk5leHQgKyBzaGFkY24vdWkgU3RhcnRlclwiLFxyXG4gIGRlc2NyaXB0aW9uOiBcIkFwcCBSb3V0ZXIgKyBUYWlsd2luZCArIHNoYWRjbi91aVwiLFxyXG59XHJcblxyXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBSb290TGF5b3V0KHsgY2hpbGRyZW4gfTogeyBjaGlsZHJlbjogUmVhY3QuUmVhY3ROb2RlIH0pIHtcclxuICByZXR1cm4gKFxyXG4gICAgPGh0bWwgbGFuZz1cInpoLUNOXCIgc3VwcHJlc3NIeWRyYXRpb25XYXJuaW5nPlxyXG4gICAgICA8Ym9keSBjbGFzc05hbWU9XCJtaW4taC1zY3JlZW4gYmctYmFja2dyb3VuZCBmb250LXNhbnMgYW50aWFsaWFzZWRcIj5cclxuICAgICAgICB7Y2hpbGRyZW59XHJcbiAgICAgIDwvYm9keT5cclxuICAgIDwvaHRtbD5cclxuICApXHJcbn1cclxuIl0sIm5hbWVzIjpbIm1ldGFkYXRhIiwidGl0bGUiLCJkZXNjcmlwdGlvbiIsIlJvb3RMYXlvdXQiLCJjaGlsZHJlbiIsImh0bWwiLCJsYW5nIiwic3VwcHJlc3NIeWRyYXRpb25XYXJuaW5nIiwiYm9keSIsImNsYXNzTmFtZSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(rsc)/./app/layout.tsx\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ RootLayout),\n/* harmony export */   metadata: () => (/* binding */ metadata)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _globals_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./globals.css */ \"(rsc)/./app/globals.css\");\n\n\nconst metadata = {\n    title: \"Next + shadcn/ui Starter\",\n    description: \"App Router + Tailwind + shadcn/ui\"\n};\nfunction RootLayout({ children }) {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"html\", {\n        lang: \"zh-CN\",\n        suppressHydrationWarning: true,\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"body\", {\n            className: \"h-screen bg-background font-sans antialiased \",\n            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                className: \"h-full w-full\",\n                children: children\n            }, void 0, false, {\n                fileName: \"E:\\\\pos-front\\\\pos-management-frontand\\\\app\\\\layout.tsx\",\n                lineNumber: 13,\n                columnNumber: 9\n            }, this)\n        }, void 0, false, {\n            fileName: \"E:\\\\pos-front\\\\pos-management-frontand\\\\app\\\\layout.tsx\",\n            lineNumber: 12,\n            columnNumber: 7\n        }, this)\n    }, void 0, false, {\n        fileName: \"E:\\\\pos-front\\\\pos-management-frontand\\\\app\\\\layout.tsx\",\n        lineNumber: 11,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9hcHAvbGF5b3V0LnRzeCIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7QUFDc0I7QUFFZixNQUFNQSxXQUFxQjtJQUNoQ0MsT0FBTztJQUNQQyxhQUFhO0FBQ2YsRUFBQztBQUVjLFNBQVNDLFdBQVcsRUFBRUMsUUFBUSxFQUFpQztJQUM1RSxxQkFDRSw4REFBQ0M7UUFBS0MsTUFBSztRQUFRQyx3QkFBd0I7a0JBQ3pDLDRFQUFDQztZQUFLQyxXQUFVO3NCQUNkLDRFQUFDQztnQkFBSUQsV0FBVTswQkFDWkw7Ozs7Ozs7Ozs7Ozs7Ozs7QUFLWCIsInNvdXJjZXMiOlsid2VicGFjazovL25leHQtc2hhZGNuLWFwcC1yb3V0ZXItc3RhcnRlci8uL2FwcC9sYXlvdXQudHN4Pzk5ODgiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHR5cGUgeyBNZXRhZGF0YSB9IGZyb20gXCJuZXh0XCJcclxuaW1wb3J0IFwiLi9nbG9iYWxzLmNzc1wiXHJcblxyXG5leHBvcnQgY29uc3QgbWV0YWRhdGE6IE1ldGFkYXRhID0ge1xyXG4gIHRpdGxlOiBcIk5leHQgKyBzaGFkY24vdWkgU3RhcnRlclwiLFxyXG4gIGRlc2NyaXB0aW9uOiBcIkFwcCBSb3V0ZXIgKyBUYWlsd2luZCArIHNoYWRjbi91aVwiLFxyXG59XHJcblxyXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBSb290TGF5b3V0KHsgY2hpbGRyZW4gfTogeyBjaGlsZHJlbjogUmVhY3QuUmVhY3ROb2RlIH0pIHtcclxuICByZXR1cm4gKFxyXG4gICAgPGh0bWwgbGFuZz1cInpoLUNOXCIgc3VwcHJlc3NIeWRyYXRpb25XYXJuaW5nPlxyXG4gICAgICA8Ym9keSBjbGFzc05hbWU9XCJoLXNjcmVlbiBiZy1iYWNrZ3JvdW5kIGZvbnQtc2FucyBhbnRpYWxpYXNlZCBcIj5cclxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImgtZnVsbCB3LWZ1bGxcIj5cclxuICAgICAgICAgIHtjaGlsZHJlbn1cclxuICAgICAgICA8L2Rpdj5cclxuICAgICAgPC9ib2R5PlxyXG4gICAgPC9odG1sPlxyXG4gIClcclxufVxyXG4iXSwibmFtZXMiOlsibWV0YWRhdGEiLCJ0aXRsZSIsImRlc2NyaXB0aW9uIiwiUm9vdExheW91dCIsImNoaWxkcmVuIiwiaHRtbCIsImxhbmciLCJzdXBwcmVzc0h5ZHJhdGlvbldhcm5pbmciLCJib2R5IiwiY2xhc3NOYW1lIiwiZGl2Il0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(rsc)/./app/layout.tsx\n");
 
 /***/ }),
 
@@ -536,7 +667,7 @@ const e23 = (0,next_dist_build_webpack_loaders_next_flight_loader_module_proxy__
 var __webpack_require__ = require("../../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@radix-ui","vendor-chunks/@floating-ui","vendor-chunks/tailwind-merge","vendor-chunks/lucide-react","vendor-chunks/tslib","vendor-chunks/react-remove-scroll","vendor-chunks/aria-hidden","vendor-chunks/react-remove-scroll-bar","vendor-chunks/use-callback-ref","vendor-chunks/use-sidecar","vendor-chunks/class-variance-authority","vendor-chunks/react-style-singleton","vendor-chunks/@swc","vendor-chunks/clsx","vendor-chunks/get-nonce"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&page=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&appPaths=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&pagePath=private-next-app-dir%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage.tsx&appDir=E%3A%5Cpos-front%5Cpos-management-frontand%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=E%3A%5Cpos-front%5Cpos-management-frontand&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@radix-ui","vendor-chunks/mime-db","vendor-chunks/axios","vendor-chunks/@floating-ui","vendor-chunks/tailwind-merge","vendor-chunks/lucide-react","vendor-chunks/follow-redirects","vendor-chunks/tslib","vendor-chunks/react-remove-scroll","vendor-chunks/form-data","vendor-chunks/get-intrinsic","vendor-chunks/asynckit","vendor-chunks/aria-hidden","vendor-chunks/react-remove-scroll-bar","vendor-chunks/combined-stream","vendor-chunks/mime-types","vendor-chunks/use-callback-ref","vendor-chunks/proxy-from-env","vendor-chunks/use-sidecar","vendor-chunks/class-variance-authority","vendor-chunks/react-style-singleton","vendor-chunks/has-symbols","vendor-chunks/delayed-stream","vendor-chunks/@swc","vendor-chunks/function-bind","vendor-chunks/es-set-tostringtag","vendor-chunks/get-proto","vendor-chunks/call-bind-apply-helpers","vendor-chunks/dunder-proto","vendor-chunks/math-intrinsics","vendor-chunks/es-errors","vendor-chunks/clsx","vendor-chunks/gopd","vendor-chunks/get-nonce","vendor-chunks/es-define-property","vendor-chunks/hasown","vendor-chunks/has-tostringtag","vendor-chunks/es-object-atoms"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&page=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&appPaths=%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage&pagePath=private-next-app-dir%2Fdashboard%2Fproducts-and-services%2Fmenu%2Fpage.tsx&appDir=E%3A%5Cpos-front%5Cpos-management-frontand%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=E%3A%5Cpos-front%5Cpos-management-frontand&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
 module.exports = __webpack_exports__;
 
 })();
