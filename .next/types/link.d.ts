@@ -30,6 +30,17 @@ declare namespace __next_route_internal_types__ {
 
   type StaticRoutes = 
     | `/`
+    | `/login`
+    | `/dashboard/bank`
+    | `/dashboard/home`
+    | `/dashboard/report/sales-trends`
+    | `/dashboard/products-and-services/merchandise/test`
+    | `/dashboard/products-and-services/menu`
+    | `/dashboard/products-and-services/inventory-management/history`
+    | `/dashboard/products-and-services/inventory-management/business-partners`
+    | `/dashboard/setting/account-and-settings/test`
+    | `/dashboard/setting/device-management/terminal`
+    | `/dashboard/setting/device-management/terminal-code`
   type DynamicRoutes<T extends string = string> = never
 
   type RouteImpl<T> = 
