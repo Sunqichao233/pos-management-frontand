@@ -9,6 +9,26 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Ellipsis, Triangle } from 'lucide-react';
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/components/ui/chart"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+
+const chartData = [
+    { month: "11", sale: 1 },
+    { month: "22", sale: 2 },
+    { month: "33", sale: 3 },
+    { month: "44", sale: 4 },
+]
+const chartConfig = {
+    sale: {
+        label: "sale",
+        color: "#e5e5e5",
+    },
+} satisfies ChartConfig
 
 // 格式化日期为 "September 10th" 形式
 const formatDate = (date: Date): string => {
@@ -35,16 +55,76 @@ const formatDate = (date: Date): string => {
     return `${month} ${day}${getOrdinal(day)}`;
 };
 
+type saleInfo = {
+    totalSales: number,
+    netSales: number,
+    totalTranactions: number,
+    netTranactions: number,
+    refunds: number,
+
+}
+
+type paymentMethod = {
+    type: string,
+    amount: number,
+    color: string,
+}
+
+type customerInfo = {
+    totalCustomers: number,
+    refundCustomers: number,
+    visits: number,
+    feedback: {
+        positive: number,
+        negative: number,
+    }
+}
+
+const customersData: customerInfo = {
+    totalCustomers: 10,
+    refundCustomers: 2,
+    visits: 20,
+    feedback: {
+        positive: 8,
+        negative: 2,
+    }
+}
+
+const salesData: saleInfo = {
+    totalSales: 50,
+    netSales: 20,
+    totalTranactions: 4,
+    netTranactions: 2,
+    refunds: 5,
+}
+
+const paymentMethods: paymentMethod[] = [
+    { type: 'card', color: 'bg-blue-600', amount: 20 },   // 银行卡支付金额
+    { type: 'cash', color: 'bg-blue-200', amount: 10 },   // 现金支付金额
+    { type: 'others', color: 'bg-blue-50', amount: 20 },  // 其他方式支付金额
+];
+
 export default function Page() {
 
     const router = useRouter();
 
     const [currentDate, setCurrentDate] = useState("");
 
+    const [saleData, setSaleData] = useState<saleInfo>(salesData);
+    const [paymentData, setPaymentData] = useState<paymentMethod[]>([]);
+    const [customerData, setCustomerData] = useState<customerInfo>(customersData);
+
+    const formatterEN = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
+    const weekdayEN = formatterEN.format(new Date());
+
     // 组件加载时获取当前日期
     useEffect(() => {
         const today = new Date();
         setCurrentDate(formatDate(today));
+        // 实际去后端API获取数据
+        setSaleData(salesData);
+        setPaymentData(paymentMethods);
+        setCustomerData(customersData);
     }, []);
 
     return (
@@ -81,13 +161,13 @@ export default function Page() {
                         <Card className="mb-6">
                             <CardHeader>
                                 <CardTitle className="text-lg">Key indicators</CardTitle>
-                                <p className="text-xs text-gray-500">vs. Past Wednesday</p>
+                                <p className="text-xs text-gray-500">vs. Past {weekdayEN}</p>
                             </CardHeader>
                             <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div className="flex flex-col">
                                     <p className="text-xs text-gray-500">Net Sales</p>
                                     <div className="flex justify-between items-start mt-1">
-                                        <p className="font-semibold text-base">$0.00</p>
+                                        <p className="font-semibold text-base">${saleData.netSales.toFixed(2)}</p>
                                         <Badge variant="outline" className="text-xs flex items-center px-2 py-0.5 bg-gray-100 text-gray-400 border-gray-200">
                                             <Triangle size={10} className="mr-1 " />
                                             Not applicable
@@ -97,7 +177,7 @@ export default function Page() {
                                 <div className="flex flex-col">
                                     <p className="text-xs text-gray-500">Total Sales</p>
                                     <div className="flex justify-between items-start mt-1">
-                                        <p className="font-semibold text-base">$0.00</p>
+                                        <p className="font-semibold text-base">${saleData.totalSales.toFixed(2)}</p>
                                         <Badge variant="outline" className="text-xs flex items-center px-2 py-0.5 bg-gray-100 text-gray-400 border-gray-200">
                                             <Triangle size={10} className="mr-1 " />
                                             Not applicable
@@ -107,7 +187,7 @@ export default function Page() {
                                 <div className="flex flex-col">
                                     <p className="text-xs text-gray-500">transaction</p>
                                     <div className="flex justify-between items-start mt-1">
-                                        <p className="font-semibold text-base">0</p>
+                                        <p className="font-semibold text-base">{saleData.totalTranactions}</p>
                                         <Badge variant="outline" className="text-xs flex items-center px-2 py-0.5 bg-gray-100 text-gray-400 border-gray-200">
                                             <Triangle size={10} className="mr-1 " />
                                             Not applicable
@@ -117,7 +197,7 @@ export default function Page() {
                                 <div className="flex flex-col">
                                     <p className="text-xs text-gray-500">Average Net Sales</p>
                                     <div className="flex justify-between items-start mt-1">
-                                        <p className="font-semibold text-base">$0.00</p>
+                                        <p className="font-semibold text-base">${(saleData.netSales / saleData.netTranactions).toFixed(2)}</p>
                                         <Badge variant="outline" className="text-xs flex items-center px-2 py-0.5 bg-gray-100 text-gray-400 border-gray-200">
                                             <Triangle size={10} className="mr-1 " />
                                             Not applicable
@@ -127,7 +207,7 @@ export default function Page() {
                                 <div className="flex flex-col">
                                     <p className="text-xs text-gray-500">Returns and Refunds</p>
                                     <div className="flex justify-between items-start mt-1">
-                                        <p className="font-semibold text-base">$0.00</p>
+                                        <p className="font-semibold text-base">${saleData.refunds.toFixed(2)}</p>
                                         <Badge variant="outline" className="text-xs flex items-center px-2 py-0.5 bg-gray-100 text-gray-400 border-gray-200">
                                             <Triangle size={10} className="mr-1 " />
                                             Not applicable
@@ -148,23 +228,23 @@ export default function Page() {
                                     <div className="space-y-2">
                                         <div className="flex justify-between">
                                             <span className="text-xs ">Total Customers</span>
-                                            <span className="text-sm">0</span>
+                                            <span className="text-sm">{customerData.totalCustomers}</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-xs ">Returning customers</span>
-                                            <span className="text-sm">0</span>
+                                            <span className="text-sm">{customerData.refundCustomers}</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-xs ">Average number of visits per customer</span>
-                                            <span className="text-sm">0</span>
+                                            <span className="text-sm">{(customerData.visits / customerData.totalCustomers)}</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-xs ">Average sales per visit</span>
-                                            <span className="text-sm">$0.00</span>
+                                            <span className="text-sm">${(saleData.totalSales / customerData.visits).toFixed(2)}</span>
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-xs ">feedback</span>
-                                            <span className="text-sm">Positive: 0, Negative: 0</span>
+                                            <span className="text-sm">Positive: {customerData.feedback.positive}, Negative: {customerData.feedback.negative}</span>
                                         </div>
                                     </div>
                                 </CardContent>
@@ -178,50 +258,47 @@ export default function Page() {
                                     <p className="text-xs text-gray-500">By transaction amount</p>
                                 </CardHeader>
                                 <CardContent>
-                                    {/* 上方分段条形图（用三个 div 模拟分段） */}
-                                    <div className="flex mb-4">
-                                        <div className="h-8 bg-blue-600 w-1/3"></div>
-                                        <div className="h-8 bg-blue-200 w-1/3"></div>
-                                        <div className="h-8 bg-blue-50 w-1/3"></div>
+                                    {/* 🔴 动态分段条形图：根据金额占比渲染宽度 */}
+                                    <div className="flex mb-4 h-8">
+                                        {paymentData.map((method, index) => (
+                                            <div
+                                                key={index}
+                                                // 关键修复：用 className 绑定颜色类，而非 style
+                                                className={`transition-all duration-300 ${method.color}`}
+                                                style={{
+                                                    // 按占比计算宽度
+                                                    width: saleData.totalSales > 0 ? `${(method.amount / saleData.totalSales) * 100}%` : '1/3',
+                                                }}
+                                            />
+                                        ))}
                                     </div>
 
-                                    {/* 下方支付方式明细列表 */}
+                                    {/* 🔴 动态支付方式明细：显示金额与占比 */}
                                     <div className="space-y-2">
-                                        {/* card 条目 */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-3 h-3 bg-blue-600"></div>
-                                                <span className="text-sm">card</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-sm">$0.00</span>
-                                                <span className="text-sm text-gray-500">0%</span>
-                                            </div>
-                                        </div>
+                                        {paymentData.map((method, index) => {
+                                            // 计算当前支付方式的占比（保留 1 位小数）
+                                            const percentage = saleData?.totalSales > 0
+                                                ? ((method.amount / saleData?.totalSales) * 100).toFixed(1)
+                                                : '0.0';
 
-                                        {/* cash 条目 */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-3 h-3 bg-blue-200"></div>
-                                                <span className="text-sm">cash</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-sm">$0.00</span>
-                                                <span className="text-sm text-gray-500">0%</span>
-                                            </div>
-                                        </div>
+                                            return (
+                                                <div key={index} className="flex items-center justify-between">
+                                                    {/* 支付方式 + 颜色标识 */}
+                                                    <div className="flex items-center gap-2">
+                                                        <div
+                                                            className={`w-3 h-3 ${method.color}`}
 
-                                        {/* others 条目 */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-3 h-3 bg-blue-50"></div>
-                                                <span className="text-sm">others</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-sm">$0.00</span>
-                                                <span className="text-sm text-gray-500">0%</span>
-                                            </div>
-                                        </div>
+                                                        />
+                                                        <span className="text-sm">{method.type}</span>
+                                                    </div>
+                                                    {/* 金额 + 占比 */}
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-sm">${method.amount.toFixed(2)}</span>
+                                                        <span className="text-sm text-gray-500">{percentage}%</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </CardContent>
                             </Card>
@@ -233,15 +310,32 @@ export default function Page() {
                                     <p className="text-xs text-gray-500">by Gross sales</p>
                                 </CardHeader>
                                 <CardContent className="py-6">
+                                    <ChartContainer config={chartConfig} className="h-24 w-full">
+                                        <BarChart accessibilityLayer data={chartData} className="">
+                                            <CartesianGrid vertical={false} horizontal={false} />
+                                            <XAxis
+                                                dataKey="month"
+                                                tickLine={false}
+                                                tickMargin={10}
+                                                axisLine={false}
+                                            />
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={<ChartTooltipContent hideLabel />}
+                                            />
+                                            <Bar dataKey="sale" fill="#e5e5e5" radius={8} />
+                                        </BarChart>
+                                    </ChartContainer>
+
                                     <div className="flex flex-col items-center justify-center h-full">
                                         {/* Lowest & Highest 左右对齐 */}
                                         <div className="w-full max-w-md flex justify-between mb-2">
                                             <span className="text-xs text-gray-500">Lowest</span>
                                             <span className="text-xs text-gray-500">Highest</span>
                                         </div>
-                                        
+
                                     </div>
-                                    <p className="text-xs text-gray-400 mt-4 items-left justify-center">There are no sales during this period</p>
+                                    {saleData.totalSales === 0 && <p className="text-xs text-gray-400 mt-4 items-left justify-center">There are no sales during this period</p>}
                                 </CardContent>
                             </Card>
 
@@ -252,15 +346,31 @@ export default function Page() {
                                     <p className="text-xs text-gray-500">by Gross sales</p>
                                 </CardHeader>
                                 <CardContent className="py-6">
+                                    <ChartContainer config={chartConfig} className="h-24 w-full">
+                                        <BarChart accessibilityLayer data={chartData} className="">
+                                            <CartesianGrid vertical={false} horizontal={false} />
+                                            <XAxis
+                                                dataKey="month"
+                                                tickLine={false}
+                                                tickMargin={10}
+                                                axisLine={false}
+                                            />
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={<ChartTooltipContent hideLabel />}
+                                            />
+                                            <Bar dataKey="sale" fill="#e5e5e5" radius={8} />
+                                        </BarChart>
+                                    </ChartContainer>
                                     <div className="flex flex-col items-center justify-center h-full">
                                         {/* Lowest & Highest 左右对齐 */}
                                         <div className="w-full max-w-md flex justify-between mb-2">
                                             <span className="text-xs text-gray-500">Lowest</span>
                                             <span className="text-xs text-gray-500">Highest</span>
                                         </div>
-                                        
+
                                     </div>
-                                    <p className="text-xs text-gray-400 mt-4 items-left justify-center">There are no sales during this period</p>
+                                    {saleData.totalSales === 0 && <p className="text-xs text-gray-400 mt-4 items-left justify-center">There are no sales during this period</p>}
                                 </CardContent>
                             </Card>
                         </div>

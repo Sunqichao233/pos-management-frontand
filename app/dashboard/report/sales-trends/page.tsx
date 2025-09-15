@@ -1,5 +1,8 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect,useRef } from "react"
+import html2canvas from "html2canvas";  //  截图DOM
+import { saveAs } from "file-saver";    // 触发文件下载
+import JSZip from "jszip";              // 创建ZIP压缩包
 import {
     SidebarInset,
 } from "@/components/ui/sidebar"
@@ -75,8 +78,10 @@ export default function Page() {
 
     const [today, setToday] = useState<String>()
     const [yesterday, setYesterday] = useState<String>()
-    console.log(today)
-    console.log(yesterday)
+
+    // 折线图和柱状图的DOM引用
+    const lineChartRef = useRef<HTMLDivElement>(null);
+    const barChartRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const today = new Date();
@@ -85,6 +90,51 @@ export default function Page() {
         setToday(formatDate(today));
         setYesterday(formatDate(yesterday))
     }, [])
+
+    // 一键下载所有图表的函数
+  const downloadAllCharts = async () => {
+    const zip = new JSZip();
+    const chartFolder = zip.folder("sales_charts"); // 压缩包内的文件夹
+
+    // 截图折线图
+    if (lineChartRef.current) {
+      try {
+        const canvas = await html2canvas(lineChartRef.current, {
+          useCORS: true, // 解决跨域图片问题
+          scale: 2,      // 提高图片分辨率
+        });
+        canvas.toBlob((blob) => {
+          if (blob) {
+            chartFolder?.file("total_sales_line_chart.png", blob);
+          }
+        });
+      } catch (error) {
+        console.error("折线图下载失败:", error);
+      }
+    }
+
+    // 截图柱状图
+    if (barChartRef.current) {
+      try {
+        const canvas = await html2canvas(barChartRef.current, {
+          useCORS: true,
+          scale: 2,
+        });
+        canvas.toBlob((blob) => {
+          if (blob) {
+            chartFolder?.file("total_sales_bar_chart.png", blob);
+          }
+        });
+      } catch (error) {
+        console.error("柱状图下载失败:", error);
+      }
+    }
+
+    // 生成ZIP并下载
+    zip.generateAsync({ type: "blob" }).then((content) => {
+      saveAs(content, "sales_charts.zip"); // 下载ZIP包
+    });
+  };
 
     return (
 
@@ -100,7 +150,7 @@ export default function Page() {
                         <Button variant="ghost" size="icon">
                             <Printer className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" onClick={downloadAllCharts}>
                             <Download className="h-4 w-4" />
                         </Button>
                     </div>
@@ -150,6 +200,7 @@ export default function Page() {
                 {/* line chart */}
                 <Card className="mt-4 border-0 shadow-none">
                     <CardContent>
+                        <div ref={lineChartRef}>
                         <ResponsiveContainer width="100%" height={400}>
                             <ChartContainer config={lineConfig}>
                                 <LineChart
@@ -191,6 +242,7 @@ export default function Page() {
                                 </LineChart>
                             </ChartContainer>
                         </ResponsiveContainer>
+                        </div>
                     </CardContent>
                 </Card>
                 <Separator className="w-full mt-2" />
@@ -215,10 +267,10 @@ export default function Page() {
                 {/* 7day ago */}
                 <h3 className="mt-4 ">TOTAL SALES</h3>
                 <div className="mt-3 flex flex-wrap gap-2">
-                    
+
                     <span className="">last 7 day</span>
                     <span className="font-semibold">$30.00</span>
-                    
+
                     <span className="">7 day ago</span>
                     <span className="font-semibold">$25.00</span>
                     <div className="ml-auto flex items-center gap-1">
@@ -233,24 +285,26 @@ export default function Page() {
                 {/* bar charts */}
                 <Card className="mt-4 border-0 shadow-none">
                     <CardContent>
+                        <div ref={barChartRef}>
                         <ResponsiveContainer width="100%" height={400}>
-                        <ChartContainer config={barConfig}>
-                            <BarChart accessibilityLayer data={barData}>
-                                <CartesianGrid vertical={false} />
-                                <XAxis
-                                    dataKey="time"
-                                    tickLine={false}
-                                    tickMargin={10}
-                                    axisLine={false}
-                                />
-                                <ChartTooltip
-                                    cursor={false}
-                                    content={<ChartTooltipContent hideLabel />}
-                                />
-                                <Bar dataKey="sales" fill="#0ea5e9" radius={8} />
-                            </BarChart>
-                        </ChartContainer>
+                            <ChartContainer config={barConfig}>
+                                <BarChart accessibilityLayer data={barData}>
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis
+                                        dataKey="time"
+                                        tickLine={false}
+                                        tickMargin={10}
+                                        axisLine={false}
+                                    />
+                                    <ChartTooltip
+                                        cursor={false}
+                                        content={<ChartTooltipContent hideLabel />}
+                                    />
+                                    <Bar dataKey="sales" fill="#0ea5e9" radius={8} />
+                                </BarChart>
+                            </ChartContainer>
                         </ResponsiveContainer>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
