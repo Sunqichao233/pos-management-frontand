@@ -29,6 +29,7 @@ export function LoginForm({
     if (condition) {
       if (emailOrPhone === "") {
         console.log("please enter email or phone number");
+        alert("please enter email or phone number");
       } else {
         console.log("emailOrPhone: " + emailOrPhone);
         router.push("/dashboard/home");
@@ -37,6 +38,7 @@ export function LoginForm({
     } else {
       if (passkey === "") {
         console.log("please enter passkey");
+        alert("please enter passkey");
       }else {
       console.log("passkey: " + passkey);
       router.push("/dashboard/home");
@@ -48,7 +50,7 @@ export function LoginForm({
   return (
     <>
       <div style={{ position: 'absolute', top: '10px', right: '20px' }}>
-        <a href="#" style={{ color: 'hsl(var(--primary))' }}>Learn more</a>
+        <a href="#" style={{ color: '#2563eb' }}>Learn more</a>
 
       </div>
       {condition ?
@@ -61,7 +63,7 @@ export function LoginForm({
                   <h1 className="text-xl font-bold">Sign in</h1>
                   <div className="text-center text-sm">
                     New to Square?{" "}
-                    <a href="#" className="underline underline-offset-4" style={{ color: 'hsl(var(--primary))' }}>
+                    <a href="#" className="underline underline-offset-4" style={{ color: '#2563eb' }}>
                       Sign up
                     </a>
                   </div>
