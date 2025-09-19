@@ -58,14 +58,31 @@ export default function Login() {
     setCurrentView('password-recovery');
   };
 
+  const onRegister = () => {
+
+  }
+  const onBackToLogin = () => {
+    setCurrentView('login');
+  }
+
 
   return (
-    <LoginPage
-      onLogin={handleLogin}
-      onNavigateToRegister={handleNavigateToRegister}
-      onNavigateToPasswordRecovery={handleNavigateToPasswordRecovery}
-      failedAttempts={failedAttempts}
-      isLocked={isLocked}
-    />
+    <>
+      {currentView === 'login' && (
+        <LoginPage
+          onLogin={handleLogin}
+          onNavigateToRegister={handleNavigateToRegister}
+          onNavigateToPasswordRecovery={handleNavigateToPasswordRecovery}
+          failedAttempts={failedAttempts}
+          isLocked={isLocked}
+        />
+      )}
+      {currentView === 'register' && (
+        <RegisterPage
+          onRegister={onRegister}
+          onBackToLogin={onBackToLogin}
+        />
+      )}
+    </>
   );
 }
