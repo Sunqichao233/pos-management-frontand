@@ -164,6 +164,25 @@ export function SidebarPOS() {
         { id: 'sales-by-section', label: 'Sales by section', icon: Clipboard, href: '/dashboard/reports/sales-by-section' },
         { id: 'sales-to-partners', label: 'Sales to business partners', icon: Building, href: '/dashboard/reports/sales-to-partners' },
     ]
+
+    const settingsSubMenu: MenuItem[] = [
+        { id: 'account-settings', label: 'Account and Settings', icon: Settings, href: '/dashboard/settings/account' },
+        {
+            id: 'device-management',
+            label: 'Device Management',
+            icon: Clipboard,
+            children: [
+                { id: 'device-terminal', label: 'Terminal', href: '/dashboard/settings/device/terminal' },
+                { id: 'device-profile', label: 'profile', href: '/dashboard/settings/device/profile' },
+            ],
+        },
+        { id: 'terminal-code', label: 'Terminal Code', icon: FileText, href: '/dashboard/settings/terminalcode' },
+        { id: 'mode', label: 'mode', icon: Clock, href: '/dashboard/settings/mode' },
+        { id: 'kitchen-display', label: 'kitchen display', icon: Package, href: '/dashboard/settings/kitchen-display' },
+        { id: 'kiosk', label: 'kiosk', icon: Package, href: '/dashboard/settings/kiosk' },
+        { id: 'pos-setup', label: 'Restaurant POS setup', icon: Building, href: '/dashboard/settings/pos-setup' },
+    ];
+
     // 渲染主菜单
     const renderMainMenu = () => (
         <div className="space-y-1">
@@ -290,6 +309,7 @@ export function SidebarPOS() {
             </div>
         );
     };
+
     const renderReportSubMenu = () => {
         const isExpanded = (id: string) => expanded.has(id);
         const toggleExpanded = (id: string) =>
@@ -384,6 +404,102 @@ export function SidebarPOS() {
             </div>
         );
     }
+
+    const renderSettingsSubMenu = () => {
+        const isExpanded = (id: string) => expanded.has(id);
+        const toggleExpanded = (id: string) =>
+            setExpanded((prev) => {
+                const next = new Set(prev);
+                if (next.has(id)) next.delete(id);
+                else next.add(id);
+                return next;
+            });
+
+        return (
+            <div className="space-y-1">
+                <div className="flex items-center px-4 py-2 text-sm font-medium text-gray-700">
+                    <ChevronLeft
+                        className="h-4 w-4 mr-2 cursor-pointer hover:text-gray-900"
+                        onClick={() => setCurrentMenu('main')}
+                    />
+                    setting
+                </div>
+                {settingsSubMenu.map((item) => {
+                    const hasChildren = !!item.children && item.children.length > 0;
+                    if (hasChildren) {
+                        const open = isExpanded(item.id);
+                        return (
+                            <div key={item.id}>
+                                <Button
+                                    variant="ghost"
+                                    className={cn("w-full justify-start")}
+                                    onClick={() => toggleExpanded(item.id)}
+                                >
+                                    {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                                    <span className="flex-1 text-left">{item.label}</span>
+                                    <ChevronRight
+                                        className={cn(
+                                            "h-4 w-4 text-gray-500 transition-transform",
+                                            open && "rotate-90"
+                                        )}
+                                    />
+                                </Button>
+                                {open && (
+                                    <div className="mt-1 space-y-1">
+                                        {item.children!.map((child) => (
+                                            <Button
+                                                key={child.id}
+                                                asChild={!!child.href}
+                                                variant="ghost"
+                                                className="w-full justify-start pl-8 text-gray-700 hover:text-gray-900"
+                                            >
+                                                {child.href ? (
+                                                    <Link href={child.href as any}>
+                                                        {child.icon && <child.icon className="h-4 w-4 mr-3" />}
+                                                        {child.label}
+                                                    </Link>
+                                                ) : (
+                                                    <>
+                                                        {child.icon && <child.icon className="h-4 w-4 mr-3" />}
+                                                        {child.label}
+                                                    </>
+                                                )}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <Button
+                            key={item.id}
+                            asChild={!!item.href}
+                            variant="ghost"
+                            className={cn(
+                                "w-full justify-start",
+                                item.href && isActive(item.href) && "bg-gray-100 text-gray-900 rounded-lg font-semibold"
+                            )}
+                        >
+                            {item.href ? (
+                                <Link href={item.href as any}>
+                                    {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <>
+                                    {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                                    {item.label}
+                                </>
+                            )}
+                        </Button>
+                    );
+                })}
+            </div>
+        );
+    }
+
     // 渲染当前菜单内容
     const renderCurrentMenu = () => {
         switch (currentMenu) {
@@ -391,6 +507,8 @@ export function SidebarPOS() {
                 return renderProductsSubMenu();
             case 'reports':
                 return renderReportSubMenu();
+            case 'settings':
+                return renderSettingsSubMenu();
             default:
                 return renderMainMenu();
         }

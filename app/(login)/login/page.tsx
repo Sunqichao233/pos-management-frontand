@@ -64,7 +64,10 @@ export default function Login() {
   const onBackToLogin = () => {
     setCurrentView('login');
   }
-
+  const onSendCode = (email: string) => {
+    setRecoveryEmail(email);
+    setCurrentView('code-sent');
+  }
 
   return (
     <>
@@ -80,6 +83,12 @@ export default function Login() {
       {currentView === 'register' && (
         <RegisterPage
           onRegister={onRegister}
+          onBackToLogin={onBackToLogin}
+        />
+      )}
+      {currentView === 'password-recovery' && (
+        <PasswordRecoveryPage
+          onSendCode={onSendCode}
           onBackToLogin={onBackToLogin}
         />
       )}

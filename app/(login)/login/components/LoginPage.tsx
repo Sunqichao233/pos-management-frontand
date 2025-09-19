@@ -31,17 +31,15 @@ export function LoginPage({ onLogin, onNavigateToRegister, onNavigateToPasswordR
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log('1');
     e.preventDefault();
-    console.log('2');
 
     if (!email && !password) {
       setError('请填写所有字段');
@@ -52,7 +50,6 @@ export function LoginPage({ onLogin, onNavigateToRegister, onNavigateToPasswordR
     //   setError('请完成验证码验证');
     //   return;
     // }
-    console.log('4');
 
     setIsLoading(true);
     setError('');
@@ -144,6 +141,7 @@ export function LoginPage({ onLogin, onNavigateToRegister, onNavigateToPasswordR
           <Button
             variant="outline"
             className="w-full bg-gray-100 hover:bg-gray-200 text-blue-600"
+            onClick={onNavigateToPasswordRecovery}
           >
             <Users className="w-4 h-4 mr-2" />
             Sign in with a passkey
