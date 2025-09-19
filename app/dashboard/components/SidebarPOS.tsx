@@ -300,89 +300,89 @@ export function SidebarPOS() {
                 return next;
             });
 
-            return (
-                <div className="space-y-1">
-                    <div className="flex items-center px-4 py-2 text-sm font-medium text-gray-700">
-                        <ChevronLeft
-                            className="h-4 w-4 mr-2 cursor-pointer hover:text-gray-900"
-                            onClick={() => setCurrentMenu('main')}
-                        />
-                        Report
-                    </div>
-                    {reportSubMenu.map((item) => {
-                        const hasChildren = !!item.children && item.children.length > 0;
-                        if (hasChildren) {
-                            const open = isExpanded(item.id);
-                            return (
-                                <div key={item.id}>
-                                    <Button
-                                        variant="ghost"
-                                        className={cn("w-full justify-start")}
-                                        onClick={() => toggleExpanded(item.id)}
-                                    >
-                                        {item.icon && <item.icon className="h-4 w-4 mr-3" />}
-                                        <span className="flex-1 text-left">{item.label}</span>
-                                        <ChevronRight
-                                            className={cn(
-                                                "h-4 w-4 text-gray-500 transition-transform",
-                                                open && "rotate-90"
-                                            )}
-                                        />
-                                    </Button>
-                                    {open && (
-                                        <div className="mt-1 space-y-1">
-                                            {item.children!.map((child) => (
-                                                <Button
-                                                    key={child.id}
-                                                    asChild={!!child.href}
-                                                    variant="ghost"
-                                                    className="w-full justify-start pl-8 text-gray-700 hover:text-gray-900"
-                                                >
-                                                    {child.href ? (
-                                                        <Link href={child.href as any}>
-                                                            {child.icon && <child.icon className="h-4 w-4 mr-3" />}
-                                                            {child.label}
-                                                        </Link>
-                                                    ) : (
-                                                        <>
-                                                            {child.icon && <child.icon className="h-4 w-4 mr-3" />}
-                                                            {child.label}
-                                                        </>
-                                                    )}
-                                                </Button>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        }
-    
-                        return (
-                            <Button
-                                key={item.id}
-                                asChild={!!item.href}
-                                variant="ghost"
-                                className={cn(
-                                    "w-full justify-start",
-                                    item.href && isActive(item.href) && "bg-gray-100 text-gray-900 rounded-lg font-semibold"
-                                )}
-                            >
-                                {item.href ? (
-                                    <Link href={item.href as any}>
-                                        {item.icon && <item.icon className="h-4 w-4 mr-3" />}
-                                        {item.label}
-                                    </Link>
-                                ) : (
-                                    <>
-                                        {item.icon && <item.icon className="h-4 w-4 mr-3" />}
-                                        {item.label}
-                                    </>
-                                )}
-                            </Button>
-                        );
-                    })}
+        return (
+            <div className="space-y-1">
+                <div className="flex items-center px-4 py-2 text-sm font-medium text-gray-700">
+                    <ChevronLeft
+                        className="h-4 w-4 mr-2 cursor-pointer hover:text-gray-900"
+                        onClick={() => setCurrentMenu('main')}
+                    />
+                    Report
                 </div>
-            );
+                {reportSubMenu.map((item) => {
+                    const hasChildren = !!item.children && item.children.length > 0;
+                    if (hasChildren) {
+                        const open = isExpanded(item.id);
+                        return (
+                            <div key={item.id}>
+                                <Button
+                                    variant="ghost"
+                                    className={cn("w-full justify-start")}
+                                    onClick={() => toggleExpanded(item.id)}
+                                >
+                                    {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                                    <span className="flex-1 text-left">{item.label}</span>
+                                    <ChevronRight
+                                        className={cn(
+                                            "h-4 w-4 text-gray-500 transition-transform",
+                                            open && "rotate-90"
+                                        )}
+                                    />
+                                </Button>
+                                {open && (
+                                    <div className="mt-1 space-y-1">
+                                        {item.children!.map((child) => (
+                                            <Button
+                                                key={child.id}
+                                                asChild={!!child.href}
+                                                variant="ghost"
+                                                className="w-full justify-start pl-8 text-gray-700 hover:text-gray-900"
+                                            >
+                                                {child.href ? (
+                                                    <Link href={child.href as any}>
+                                                        {child.icon && <child.icon className="h-4 w-4 mr-3" />}
+                                                        {child.label}
+                                                    </Link>
+                                                ) : (
+                                                    <>
+                                                        {child.icon && <child.icon className="h-4 w-4 mr-3" />}
+                                                        {child.label}
+                                                    </>
+                                                )}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <Button
+                            key={item.id}
+                            asChild={!!item.href}
+                            variant="ghost"
+                            className={cn(
+                                "w-full justify-start",
+                                item.href && isActive(item.href) && "bg-gray-100 text-gray-900 rounded-lg font-semibold"
+                            )}
+                        >
+                            {item.href ? (
+                                <Link href={item.href as any}>
+                                    {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                                    {item.label}
+                                </Link>
+                            ) : (
+                                <>
+                                    {item.icon && <item.icon className="h-4 w-4 mr-3" />}
+                                    {item.label}
+                                </>
+                            )}
+                        </Button>
+                    );
+                })}
+            </div>
+        );
     }
     // 渲染当前菜单内容
     const renderCurrentMenu = () => {
@@ -397,7 +397,7 @@ export function SidebarPOS() {
     };
 
     return (
-        <SidebarProvider>
+        <SidebarProvider className="w-80">
             <Sidebar className="w-72 bg-gray-50">
                 <SidebarHeader className="border-b border-gray-200">
                     <div className="flex items-center justify-between px-4 py-3">
