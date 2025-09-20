@@ -58,14 +58,40 @@ export default function Login() {
     setCurrentView('password-recovery');
   };
 
+  const onRegister = () => {
+
+  }
+  const onBackToLogin = () => {
+    setCurrentView('login');
+  }
+  const onSendCode = (email: string) => {
+    setRecoveryEmail(email);
+    setCurrentView('code-sent');
+  }
 
   return (
-    <LoginPage
-      onLogin={handleLogin}
-      onNavigateToRegister={handleNavigateToRegister}
-      onNavigateToPasswordRecovery={handleNavigateToPasswordRecovery}
-      failedAttempts={failedAttempts}
-      isLocked={isLocked}
-    />
+    <>
+      {currentView === 'login' && (
+        <LoginPage
+          onLogin={handleLogin}
+          onNavigateToRegister={handleNavigateToRegister}
+          onNavigateToPasswordRecovery={handleNavigateToPasswordRecovery}
+          failedAttempts={failedAttempts}
+          isLocked={isLocked}
+        />
+      )}
+      {currentView === 'register' && (
+        <RegisterPage
+          onRegister={onRegister}
+          onBackToLogin={onBackToLogin}
+        />
+      )}
+      {currentView === 'password-recovery' && (
+        <PasswordRecoveryPage
+          onSendCode={onSendCode}
+          onBackToLogin={onBackToLogin}
+        />
+      )}
+    </>
   );
 }

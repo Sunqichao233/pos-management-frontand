@@ -1,183 +1,181 @@
-'use client'
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { authUtils, loginApi } from '@/api/login';
-import { LogOut, User, ShoppingCart, Package, TrendingUp } from 'lucide-react';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
+import { ArrowRight, Wallet, Edit, PlusCircle, CalendarIcon, ChevronDownIcon } from 'lucide-react';
+import Link from 'next/link';
 
-export default function Dashboard() {
-  const router = useRouter();
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+// 假数据
+const performanceData = [
+  { title: 'Net Sales', value: '$0.00' },
+  { title: 'Total Sales', value: '$0.00' },
+  { title: 'Transaction', value: '0' },
+  { title: 'Average Net Sales', value: '$0.00' },
+  { title: 'Returns and Refunds', value: '$0.00' },
+  { title: 'Average Sales per Ticket', value: '$0.00' },
+];
 
-  useEffect(() => {
-    // 检查登录状态
-    if (!authUtils.isLoggedIn()) {
-      router.push('/login');
-      return;
-    }
+const customerData = [
+  { label: 'Total Customers', value: '0' },
+  { label: 'Returning Customers', value: '0' },
+  { label: 'Average number of visits per customer', value: '0' },
+  { label: 'Average sales per visit', value: '$0' },
+  { label: 'Feedback', value: 'Positive: 0, Negative: 0' },
+];
 
-    // 获取用户信息
-    const userInfo = authUtils.getLocalUserInfo();
-    setUser(userInfo);
-    setIsLoading(false);
-  }, [router]);
+const paymentMethodData = {
+  total: '0.00',
+  breakdown: [
+    { type: 'card', value: '$0.00', color: 'bg-blue-600' },
+    { type: 'cash', value: '$0.00', color: 'bg-gray-400' },
+    { type: 'others', value: '$0.00', color: 'bg-gray-200' },
+  ],
+};
 
-  const handleLogout = async () => {
-    try {
-      await loginApi.logout();
-    } catch (error) {
-      console.error('登出失败:', error);
-      // 即使失败也清除本地数据并跳转
-      localStorage.clear();
-      router.push('/login');
-    }
-  };
+// 辅助组件：卡片内容渲染函数
+const renderCardContent = (data: { title: string; value: string }[]) => {
+  return data.map((item, index) => (
+    <div key={index} className="flex justify-between items-center py-2 border-b last:border-b-0">
+      <span className="text-sm text-gray-600">{item.title}</span>
+      <span className="font-semibold text-sm">{item.value}</span>
+    </div>
+  ));
+};
 
-  if (isLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>加载中...</p>
+export default function DashboardPage() {
+  return (
+    <div className="flex-1 p-8">
+      {/* 顶部导航和操作按钮 */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Welcome to Square Dashboard</h1>
+        <div className="space-x-2">
+          <Button variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
+            <ArrowRight className="h-4 w-4 mr-2" />
+            Go to Bank
+          </Button>
+          <Button className="bg-blue-600 text-white hover:bg-blue-700">
+            <Wallet className="h-4 w-4 mr-2" />
+            Accepting payments
+          </Button>
+          <Button variant="ghost" className="text-gray-700 hover:bg-gray-100">
+            <Edit className="h-4 w-4 mr-2" />
+            Edit Menu
+          </Button>
+          <Button variant="ghost" className="text-gray-700 hover:bg-gray-100">
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Add a product
+          </Button>
         </div>
       </div>
-    );
-  }
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold">POS 管理系统</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <User className="w-4 h-4" />
-                <span className="text-sm">{user?.name || user?.email || '用户'}</span>
-              </div>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                登出
+      {/* 仪表盘内容区域 */}
+      <div className="space-y-6">
+        {/* Performance 卡片 */}
+        <Card className="p-6">
+          <CardHeader className="flex flex-row justify-between items-center p-0 mb-4">
+            <CardTitle className="text-2xl font-semibold">performance</CardTitle>
+            <div className="flex items-center space-x-2 text-gray-600 text-sm">
+              <span className="text-gray-500">September 19, 2025</span>
+              <CalendarIcon className="h-4 w-4" />
+              <Button variant="ghost" className="p-0 h-auto">
+                All time <ChevronDownIcon className="h-4 w-4 ml-1" />
               </Button>
             </div>
-          </div>
-        </div>
-      </header>
+          </CardHeader>
+          <CardContent className="p-0">
+            <h3 className="text-lg font-medium mb-4">Key Indicators</h3>
+            <div className="grid grid-cols-3 gap-4">
+              {performanceData.map((item, index) => (
+                <div key={index} className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-sm text-gray-500">{item.title}</p>
+                  <p className="text-2xl font-bold text-gray-800">{item.value}</p>
+                  <p className="text-xs text-gray-400 mt-1">Not applicable</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            欢迎回来！
-          </h2>
-          <p className="text-gray-600">
-            今天是 {new Date().toLocaleDateString('zh-CN')}
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium">今日销售</h3>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+        {/* 下排卡片 */}
+        <div className="grid grid-cols-3 gap-6">
+          {/* Customers 卡片 */}
+          <Card className="p-6">
+            <CardHeader className="p-0 mb-4">
+              <CardTitle className="text-xl font-semibold">Customers</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">¥12,345</div>
-              <p className="text-xs text-muted-foreground">
-                +20.1% 比昨天
-              </p>
+            <CardContent className="p-0 space-y-2">
+              {customerData.map((item, index) => (
+                <div key={index} className="flex justify-between items-center text-sm">
+                  <span className="text-gray-600">{item.label}</span>
+                  <span className="font-semibold">{item.value}</span>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium">订单数量</h3>
-              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+          {/* Payment Method 卡片 */}
+          <Card className="p-6">
+            <CardHeader className="p-0 mb-4">
+              <CardTitle className="text-xl font-semibold">payment method</CardTitle>
+              <CardDescription className="p-0 text-sm text-gray-500">
+                By transaction amount
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">89</div>
-              <p className="text-xs text-muted-foreground">
-                +15% 比昨天
-              </p>
+            <CardContent className="p-0">
+              <div className="flex items-center space-x-1 mb-4">
+                {paymentMethodData.breakdown.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`h-4 rounded-md ${item.color}`}
+                    style={{ flex: item.value.replace('$', '') }}
+                  />
+                ))}
+              </div>
+              <div className="space-y-2">
+                {paymentMethodData.breakdown.map((item, index) => (
+                  <div key={index} className="flex items-center text-sm">
+                    <div className={`h-2.5 w-2.5 rounded-full ${item.color} mr-2`} />
+                    <span className="capitalize">{item.type}</span>
+                    <span className="ml-auto font-semibold">{item.value}</span>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium">商品数量</h3>
-              <Package className="h-4 w-4 text-muted-foreground" />
+          {/* Merchandise 卡片 */}
+          <Card className="p-6">
+            <CardHeader className="p-0 mb-4">
+              <CardTitle className="text-xl font-semibold">merchandise</CardTitle>
+              <CardDescription className="p-0 text-sm text-gray-500">
+                By Gross Sales
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">1,234</div>
-              <p className="text-xs text-muted-foreground">
-                库存充足
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="text-sm font-medium">系统状态</h3>
-              <Badge variant="secondary" className="bg-green-100 text-green-800">
-                正常
-              </Badge>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">99.9%</div>
-              <p className="text-xs text-muted-foreground">
-                系统运行时间
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardHeader>
-              <h3 className="text-lg font-semibold">商品管理</h3>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                管理商品信息、库存和价格
-              </p>
-              <Button className="w-full">进入管理</Button>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardHeader>
-              <h3 className="text-lg font-semibold">订单管理</h3>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                查看和处理客户订单
-              </p>
-              <Button className="w-full">查看订单</Button>
-            </CardContent>
-          </Card>
-
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardHeader>
-              <h3 className="text-lg font-semibold">销售报表</h3>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                查看销售数据和统计信息
-              </p>
-              <Button className="w-full">查看报表</Button>
+            <CardContent className="p-0 space-y-2">
+              <p className="text-sm text-gray-600">Lowest</p>
+              <p className="text-sm text-gray-600">Highest</p>
+              <div className="mt-4 text-center text-gray-500">
+                <p>There are no sales during this period.</p>
+              </div>
             </CardContent>
           </Card>
         </div>
-      </main>
+
+        {/* Category 卡片 */}
+        <Card className="p-6 w-1/3">
+          <CardHeader className="p-0 mb-4">
+            <CardTitle className="text-xl font-semibold">category</CardTitle>
+            <CardDescription className="p-0 text-sm text-gray-500">
+              By Gross Sales
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0 space-y-2">
+            <p className="text-sm text-gray-600">Lowest</p>
+            <p className="text-sm text-gray-600">Highest</p>
+            <div className="mt-4 text-center text-gray-500">
+              <p>There are no sales during this period.</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

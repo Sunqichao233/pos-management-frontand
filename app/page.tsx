@@ -1,5 +1,5 @@
-import { TemplateDocumentation } from "@/components/template-documentation"
+import { redirect } from "next/navigation"
 
 export default function Page() {
-  return <TemplateDocumentation />
+  redirect("/dashboard")
 }
