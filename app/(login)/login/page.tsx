@@ -2,9 +2,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoginPage } from './components/LoginPage';
-import { PasswordRecoveryPage } from './components/PasswordRecoveryPage';
 import { RegisterPage } from './components/RegisterPage';
 import { ResetPasswordModal } from './components/ResetPasswordModal';
+import { LanguageProvider, useLanguage } from './components/LanguageContext';
+import { ThemeProvider } from './components/ThemeContext';
 
 
 type ViewType = 'login' | 'password-recovery' | 'code-sent' | 'register' | 'register-success' | 'password-reset-success';
@@ -54,18 +55,24 @@ export default function Login() {
     setCurrentView('register');
   };
 
-  const handleNavigateToPasswordRecovery = () => {
-    setCurrentView('password-recovery');
+  // 新增：根据新版 LoginPage 的 props 定义回调
+  const handleLoginSuccess = (email: string) => {
+    router.push('/dashboard');
   };
 
+  const handleSwitchToRegister = () => {
+    setCurrentView('register');
+  };
 
   return (
-    <LoginPage
-      onLogin={handleLogin}
-      onNavigateToRegister={handleNavigateToRegister}
-      onNavigateToPasswordRecovery={handleNavigateToPasswordRecovery}
-      failedAttempts={failedAttempts}
-      isLocked={isLocked}
-    />
+    // 新增：用 Provider 包裹页面，避免 useLanguage/useTheme 报错
+    <LanguageProvider>
+      <ThemeProvider>
+        <LoginPage
+          onLoginSuccess={handleLoginSuccess}
+          onSwitchToRegister={handleSwitchToRegister}
+        />
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }
