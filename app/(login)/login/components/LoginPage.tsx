@@ -1,292 +1,518 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { Eye, EyeOff, Shield, HelpCircle } from 'lucide-react';
-import { loginApi } from '@/api/login';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { MFAPopup } from './MFAPopup';
+import { Eye, EyeOff, Mail, Phone } from 'lucide-react';
+import { useLanguage } from './LanguageContext';
+import { useTheme } from './ThemeContext';
 
 interface LoginPageProps {
-  onLogin: (email: string, password: string, rememberMe: boolean) => {
-    success: boolean;
-    error?: string;
-    requiresVerification?: boolean;
-    requiresCaptcha?: boolean;
-    requiresRiskControl?: boolean;
-  };
-  onNavigateToRegister: () => void;
-  onNavigateToPasswordRecovery: () => void;
-  failedAttempts: number;
-  isLocked: boolean;
+  onLoginSuccess: (email: string) => void;
+  onSwitchToRegister: () => void;
 }
 
-export function LoginPage({ onLogin, onNavigateToRegister, onNavigateToPasswordRecovery, failedAttempts, isLocked }: LoginPageProps) {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
+export function LoginPage({ onLoginSuccess, onSwitchToRegister }: LoginPageProps) {
+  const { t } = useLanguage();
+  const { theme } = useTheme();
+  const [currentView, setCurrentView] = useState<'login' | 'forgot-password' | 'reset-success'>('login');
+  const [loginType, setLoginType] = useState<'email' | 'phone'>('email');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [showMFA, setShowMFA] = useState(false);
+  const [showPhoneVerification, setShowPhoneVerification] = useState(false);
+  const [phoneVerificationCode, setPhoneVerificationCode] = useState('');
   const [error, setError] = useState('');
+  const [isLocked, setIsLocked] = useState(false);
   const [showCaptcha, setShowCaptcha] = useState(false);
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [resetEmail, setResetEmail] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+  
+  // Phone verification states
+  const [codeSent, setCodeSent] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
+  const [verificationError, setVerificationError] = useState('');
+  const [resendCountdown, setResendCountdown] = useState(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const sendVerificationCode = () => {
+    if (!identifier) {
+      setError(t('error.enterPhoneNumber'));
+      return;
+    }
     
-    if (!email || !password) {
-      setError('请填写所有字段');
-      return;
-    }
-
-    if (showCaptcha && !captchaVerified) {
-      setError('请完成验证码验证');
-      return;
-    }
-
-    setIsLoading(true);
     setError('');
-
-    try {
-      // 调用真实的登录API
-      const data = await loginApi.login({
-        email,
-        password,
-        rememberMe
+    setVerificationError('');
+    setCodeSent(true);
+    setResendCountdown(60);
+    
+    // Start countdown timer
+    const timer = setInterval(() => {
+      setResendCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
       });
+    }, 1000);
+    
+    // Simulate sending SMS code
+    console.log('Verification code sent to:', identifier);
+  };
 
-      if (data.token) {
-        // 登录成功，跳转到主页面
-        console.log('登录成功:', data);
-        router.push('/dashboard');
-      } else {
-        setError(data.message || '登录失败');
+  const verifyPhoneCode = () => {
+    // Simulate verification - in real app, this would verify with backend
+    if (verificationCode !== '123456') {
+      setVerificationError(t('error.verificationIncorrect'));
+      return;
+    }
+    
+    setVerificationError('');
+    setError('');
+    onLoginSuccess(identifier);
+  };
+
+  const handleLogin = () => {
+    if (loginType === 'email') {
+      if (!identifier || !password) {
+        setError(t('error.fillAllFields'));
+        return;
       }
-    } catch (error: any) {
-      console.error('登录错误:', error);
+
+      // Simulate login validation
+      if (password === 'wrong') {
+        const newFailedAttempts = failedAttempts + 1;
+        setFailedAttempts(newFailedAttempts);
+        
+        if (newFailedAttempts >= 10) {
+          setIsLocked(true);
+          setError(t('error.accountLocked'));
+          return;
+        } else if (newFailedAttempts >= 3) {
+          setShowCaptcha(true);
+          setError(t('error.completeCaptcha'));
+          return;
+        }
+        
+        setError(t('error.invalidCredentials'));
+        return;
+      }
+
+      setError('');
+      setShowMFA(true);
+    } else {
+      // Phone login - verify code
+      if (!codeSent) {
+        setError(t('error.fillAllFields'));
+        return;
+      }
       
-      // 处理不同类型的错误
-      if (error.response?.status === 401) {
-        setError('邮箱或密码错误');
-      } else if (error.response?.status === 429) {
-        setError('登录尝试次数过多，请稍后再试');
-        setShowCaptcha(true);
-      } else if (error.response?.status === 423) {
-        setError('账户已被锁定，请联系客服');
-      } else {
-        setError(error.message || '网络错误，请稍后重试');
+      if (!verificationCode || verificationCode.length !== 6) {
+        setError(t('login.enterCode'));
+        return;
       }
-    } finally {
-      setIsLoading(false);
+      
+      verifyPhoneCode();
     }
   };
 
-  const handleCaptchaVerify = () => {
-    // Simulate captcha verification
-    setCaptchaVerified(true);
+  const handleMFASuccess = () => {
+    setShowMFA(false);
+    onLoginSuccess(identifier);
+  };
+
+  const handlePhoneVerification = () => {
+    if (phoneVerificationCode.length === 6) {
+      setShowPhoneVerification(false);
+      onLoginSuccess(identifier);
+    }
+  };
+
+  const handleForgotPassword = () => {
+    if (!resetEmail) {
+      setError(t('error.emailRequired'));
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(resetEmail)) {
+      setError(t('error.emailInvalid'));
+      return;
+    }
+
     setError('');
+    setIsResetting(true);
+    
+    // Simulate sending reset email
+    setTimeout(() => {
+      setIsResetting(false);
+      setCurrentView('reset-success');
+    }, 2000);
   };
 
-  const handleSSOLogin = (provider: string) => {
-    setError(`${provider} login is not implemented in this demo`);
+  const handleBackToLogin = () => {
+    setCurrentView('login');
+    setError('');
+    setResetEmail('');
   };
 
-  return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center p-4 bg-background overflow-y-auto">
-      <div className="w-full max-w-md space-y-4 my-auto flex-shrink-0">
-        {/* Logo */}
-        <div className="text-center">
-          <div className="mx-auto w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
-            <Shield className="w-6 h-6 text-primary-foreground" />
-          </div>
-          <h1 className="text-2xl font-medium">Welcome Back</h1>
-          <p className="text-muted-foreground mt-2">Sign in to your account</p>
-        </div>
+  if (isLocked) {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4 bg-background">
+        <Card className="w-full max-w-md bg-card border shadow-lg">
+          <CardHeader className="text-center">
+            <CardTitle>{t('error.accountLockedTitle')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Alert className="border-destructive">
+              <AlertDescription>
+                {t('error.accountLockedMessage')}
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
-        <Card className="border-border/50">
-          <CardHeader className="space-y-3 pb-3">
+  if (currentView === 'forgot-password') {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4 relative overflow-hidden bg-background">
+        <div className="absolute inset-0 opacity-30" style={{ 
+          backgroundImage: theme === 'dark' 
+            ? 'radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(251, 113, 133, 0.08) 0%, transparent 50%)'
+            : 'radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.06) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(239, 68, 68, 0.04) 0%, transparent 50%)',
+        }} />
+        <Card className="w-full max-w-md border relative z-10 bg-card shadow-lg">
+          <CardHeader className="text-center space-y-1 pb-6">
+            <CardTitle className="text-3xl">{t('forgot.title')}</CardTitle>
+            <p className="text-muted-foreground">
+              {t('forgot.description')}
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email or Phone</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email or phone"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={isLocked}
+              <Label htmlFor="reset-email">{t('forgot.email')}</Label>
+              <Input 
+                id="reset-email"
+                type="email" 
+                placeholder={t('forgot.emailPlaceholder')}
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                className="h-12"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={isLocked}
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-auto p-1"
-                  onClick={() => setShowPassword(!showPassword)}
-                  disabled={isLocked}
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </Button>
-              </div>
+
+            {error && (
+              <Alert className="border-destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-3">
+              <Button 
+                onClick={handleForgotPassword} 
+                className="w-full h-12 bg-primary text-primary-foreground hover:opacity-90"
+                disabled={isResetting}
+              >
+                {isResetting ? t('login.sendCode') + '...' : t('forgot.sendLink')}
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={handleBackToLogin}
+                className="w-full h-12"
+              >
+                {t('forgot.backToLogin')}
+              </Button>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
-            {/* Failed attempts indicator */}
-            {failedAttempts > 0 && !isLocked && (
-              <div className="flex items-center gap-2 text-sm text-destructive">
-                <Shield className="w-4 h-4" />
-                Failed attempts: {failedAttempts}/10
-                {failedAttempts >= 3 && (
-                  <Badge variant="destructive" className="text-xs">
-                    Security check required
-                  </Badge>
-                )}
-              </div>
-            )}
+  if (currentView === 'reset-success') {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4 relative overflow-hidden bg-background">
+        <div className="absolute inset-0 opacity-30" style={{ 
+          backgroundImage: theme === 'dark' 
+            ? 'radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(251, 113, 133, 0.08) 0%, transparent 50%)'
+            : 'radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.06) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(239, 68, 68, 0.04) 0%, transparent 50%)',
+        }} />
+        <Card className="w-full max-w-md border relative z-10 bg-card shadow-lg">
+          <CardHeader className="text-center space-y-1 pb-6">
+            <CardTitle className="text-3xl">{t('forgot.emailSent')}</CardTitle>
+            <p className="text-muted-foreground">
+              {t('forgot.checkEmail')}
+            </p>
+            <p className="font-medium">{resetEmail}</p>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Alert>
+              <AlertDescription>
+                {t('forgot.checkEmail')}
+              </AlertDescription>
+            </Alert>
 
-            {/* Account locked indicator */}
-            {isLocked && (
-              <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 p-3 rounded-lg">
-                <Shield className="w-4 h-4" />
-                <div>
-                  <p className="font-medium">Account Locked</p>
-                  <p className="text-xs">Too many failed attempts. Contact support to unlock.</p>
+            <div className="space-y-3">
+              <Button 
+                onClick={handleBackToLogin}
+                className="w-full h-12 bg-primary text-primary-foreground hover:opacity-90"
+              >
+                {t('forgot.returnToLogin')}
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={() => setCurrentView('forgot-password')}
+                className="w-full h-12"
+              >
+                {t('login.resend')}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 gap-8 relative overflow-hidden bg-background">
+        {/* 微妙的背景层次 */}
+        <div className="absolute inset-0 opacity-30" style={{ 
+          backgroundImage: theme === 'dark' 
+            ? 'radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(251, 113, 133, 0.08) 0%, transparent 50%)'
+            : 'radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.06) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(239, 68, 68, 0.04) 0%, transparent 50%)',
+        }} />
+        
+        {/* Sympol POS Logo - 专业简洁 */}
+        <div className="text-center relative z-10">
+          <h1 className="tracking-tight text-foreground" style={{ 
+            fontSize: '36px', 
+            fontWeight: 600, 
+            letterSpacing: '-0.02em'
+          }}>
+            Sympol <span className="text-primary">POS</span>
+          </h1>
+          <p className="mt-2 text-muted-foreground" style={{ 
+            fontSize: '14px',
+            letterSpacing: '0.02em'
+          }}>
+            {t('login.subtitle')}
+          </p>
+        </div>
+        
+        <Card className="w-full max-w-md border relative z-10 bg-card shadow-lg">
+          <CardHeader className="text-center space-y-1 pb-6">
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Tabs value={loginType} onValueChange={(value) => {
+              setLoginType(value as 'email' | 'phone');
+              // Reset all states when switching tabs
+              setError('');
+              setVerificationError('');
+              setCodeSent(false);
+              setVerificationCode('');
+              setResendCountdown(0);
+            }} className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="email" className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  {t('login.email')}
+                </TabsTrigger>
+                <TabsTrigger value="phone" className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  {t('login.phone')}
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="email" className="space-y-4 mt-6">
+                <div className="space-y-2">
+                  <Label htmlFor="email">{t('login.emailAddress')}</Label>
+                  <Input 
+                    id="email"
+                    type="email" 
+                    placeholder={t('login.enterEmail')}
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    className="h-12"
+                  />
                 </div>
-              </div>
-            )}
+              </TabsContent>
+              
+              <TabsContent value="phone" className="space-y-4 mt-6">
+                <div className="space-y-2">
+                  <Label htmlFor="phone">{t('login.phoneNumber')}</Label>
+                  <div className="flex gap-2">
+                    <Input 
+                      id="phone"
+                      type="tel" 
+                      placeholder={t('login.enterPhone')}
+                      value={identifier}
+                      onChange={(e) => setIdentifier(e.target.value)}
+                      className="h-12 flex-1"
+                      disabled={codeSent}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={sendVerificationCode}
+                      disabled={resendCountdown > 0 || !identifier}
+                      className="h-12 whitespace-nowrap"
+                    >
+                      {codeSent 
+                        ? resendCountdown > 0 
+                          ? `${t('login.resend')} (${resendCountdown}s)` 
+                          : t('login.resend')
+                        : t('login.sendCode')
+                      }
+                    </Button>
+                  </div>
+                </div>
+                
+                {codeSent && (
+                  <div className="space-y-2">
+                    <Label htmlFor="verification-code">{t('login.verificationCode')}</Label>
+                    <Input 
+                      id="verification-code"
+                      type="text" 
+                      placeholder={t('login.enterCode')}
+                      value={verificationCode}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                        setVerificationCode(value);
+                        setVerificationError('');
+                      }}
+                      className="h-12 text-center text-lg tracking-widest"
+                      maxLength={6}
+                    />
+                    {verificationError && (
+                      <p className="text-sm text-destructive">{verificationError}</p>
+                    )}
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
 
-            {/* Captcha simulation */}
-            {showCaptcha && !captchaVerified && (
-              <div className="p-4 bg-muted rounded-lg space-y-2">
-                <p className="text-sm">Please verify you're human:</p>
-                <div className="bg-background p-3 rounded border-2 border-dashed border-border text-center">
-                  <p className="text-sm text-muted-foreground mb-2">I'm not a robot</p>
-                  <Button 
-                    variant="outline" 
+            {loginType === 'email' && (
+              <div className="space-y-2">
+                <Label htmlFor="password">{t('login.password')}</Label>
+                <div className="relative">
+                  <Input 
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t('login.password')}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-12 pr-10"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
                     size="sm"
-                    onClick={handleCaptchaVerify}
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
                   >
-                    Verify
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </Button>
                 </div>
               </div>
             )}
 
-            {captchaVerified && (
-              <Badge variant="secondary" className="w-fit">
-                ✓ Captcha verified
-              </Badge>
+            {error && (
+              <Alert className="border-destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             )}
 
-            {error && (
-              <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-lg">
-                {error}
+            {loginType === 'email' && showCaptcha && (
+              <div className="border-2 border-dashed border-muted rounded-lg p-4 text-center text-muted-foreground">
+                <p>{t('error.completeCaptcha')}</p>
               </div>
             )}
-          </CardHeader>
-
-          <CardContent className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="remember" 
-                checked={rememberMe}
-                onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                disabled={isLocked}
-              />
-              <Label htmlFor="remember" className="text-sm">Remember me</Label>
-            </div>
 
             <Button 
-              type="submit" 
-              className="w-full" 
-              onClick={handleSubmit}
-              disabled={isLoading || isLocked}
+              onClick={handleLogin} 
+              className="w-full h-12 bg-primary text-primary-foreground hover:opacity-90"
+              disabled={isLocked}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {t('login.signIn')}
             </Button>
 
-            <div className="space-y-2">
-              <Button 
-                variant="outline" 
-                className="w-full h-9" 
-                onClick={onNavigateToRegister}
-                disabled={isLoading}
-              >
-                Register New Account
+            <div className="text-center">
+              <Button variant="link" className="text-sm" onClick={() => setCurrentView('forgot-password')}>
+                {t('login.forgotPassword')}
               </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full h-9" 
-                onClick={onNavigateToPasswordRecovery}
-                disabled={isLoading}
-              >
-                Forgot Password?
-              </Button>
-              <Button 
-                variant="ghost" 
-                className="w-full h-9" 
-                onClick={() => setError('Customer support is not implemented in this demo')}
-                disabled={isLoading}
-              >
-                <HelpCircle className="w-4 h-4 mr-2" />
-                Customer Support
-              </Button>
-            </div>
-
-            <Separator />
-
-            <div className="space-y-3">
-              <p className="text-sm text-center text-muted-foreground">Or continue with</p>
-              <div className="grid grid-cols-3 gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="h-8 text-xs"
-                  onClick={() => handleSSOLogin('Google')}
-                  disabled={isLoading}
-                >
-                  Google
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="h-8 text-xs"
-                  onClick={() => handleSSOLogin('Apple')}
-                  disabled={isLoading}
-                >
-                  Apple
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="h-8 text-xs"
-                  onClick={() => handleSSOLogin('WeChat')}
-                  disabled={isLoading}
-                >
-                  WeChat
-                </Button>
-              </div>
             </div>
           </CardContent>
+          <CardFooter className="flex justify-center">
+            <p className="text-sm text-muted-foreground">
+              {t('login.noAccount')}{' '}
+              <Button variant="link" onClick={onSwitchToRegister} className="p-0">
+                {t('login.signUp')}
+              </Button>
+            </p>
+          </CardFooter>
         </Card>
-
-        <p className="text-xs text-center text-muted-foreground">
-          Demo credentials: demo@example.com / password123
-        </p>
       </div>
-    </div>
+
+      {showMFA && (
+        <MFAPopup 
+          onSuccess={handleMFASuccess}
+          onCancel={() => setShowMFA(false)}
+        />
+      )}
+
+      {showPhoneVerification && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-md">
+            <CardHeader className="text-center">
+              <CardTitle>Phone Verification</CardTitle>
+              <p className="text-muted-foreground">
+                We've sent a verification code to {identifier}
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="phone-code">Verification Code</Label>
+                <Input 
+                  id="phone-code"
+                  type="text" 
+                  placeholder="Enter 6-digit code"
+                  value={phoneVerificationCode}
+                  onChange={(e) => setPhoneVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  className="text-center text-lg tracking-widest h-12"
+                  maxLength={6}
+                />
+              </div>
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowPhoneVerification(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handlePhoneVerification}
+                  className="flex-1"
+                  disabled={phoneVerificationCode.length !== 6}
+                >
+                  Verify
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </>
   );
 }
