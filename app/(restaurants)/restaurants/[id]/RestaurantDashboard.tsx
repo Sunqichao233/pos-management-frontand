@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react"
 import { Search, DollarSign, TrendingUp, FileText, Users, ShoppingBag, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -9,10 +11,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 type TimeRange = 'today' | 'week' | 'month'
 
 interface RestaurantDashboardProps {
+  restaurantId: string
   onNavigate?: (page: string) => void
 }
 
-export function RestaurantDashboard({ onNavigate }: RestaurantDashboardProps) {
+export function RestaurantDashboard({ restaurantId, onNavigate }: RestaurantDashboardProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [timeRange, setTimeRange] = useState<TimeRange>('today')
 
