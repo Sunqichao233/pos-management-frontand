@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react"
 import { Plus, MapPin, Clock, User, TrendingUp, ShoppingBag, Star, MoreVertical, Copy, Edit, Trash2, Power, Upload, Store, ExternalLink, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,7 +13,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { Toast } from "@/components/ui/toast"
-import { useLanguage } from "../LanguageContext"
+import { useLanguage } from "../../LanguageContext"
 
 export interface DaySchedule {
   isOpen: boolean
@@ -60,8 +61,15 @@ interface MyRestaurantsProps {
   onEnterRestaurant?: (restaurantId: string) => void
 }
 
-export function MyRestaurants({ restaurants, onAddRestaurant, onUpdateRestaurant, onDeleteRestaurant, onToggleStatus, onNavigateToAddRestaurant, onEnterRestaurant }: MyRestaurantsProps) {
-  const { t } = useLanguage()
+export default function MyRestaurants({ 
+  restaurants = [],
+   onAddRestaurant, 
+   onUpdateRestaurant, 
+   onDeleteRestaurant,
+  onToggleStatus, 
+  onNavigateToAddRestaurant, 
+  onEnterRestaurant 
+}: MyRestaurantsProps) {
   const [showNewStoreDialog, setShowNewStoreDialog] = useState(false)
   const [showEditStoreDialog, setShowEditStoreDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
@@ -104,19 +112,6 @@ export function MyRestaurants({ restaurants, onAddRestaurant, onUpdateRestaurant
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showDeleteRestaurantDialog, setShowDeleteRestaurantDialog] = useState(false)
   const [deleteConfirmChecked, setDeleteConfirmChecked] = useState(false)
-
-  const getStatusBadgeVariant = (status: Restaurant['status']) => {
-    switch (status) {
-      case 'active':
-        return 'default'
-      case 'inactive':
-        return 'secondary'
-      case 'maintenance':
-        return 'destructive'
-      default:
-        return 'secondary'
-    }
-  }
 
   const getStoreTypeLabel = (type: Restaurant['storeType']) => {
     const labels = {
@@ -307,22 +302,6 @@ export function MyRestaurants({ restaurants, onAddRestaurant, onUpdateRestaurant
 
   }
 
-  const handleCopyAsTemplate = (restaurant: Restaurant) => {
-    setSelectedTemplateStore(restaurant)
-    // Pre-fill form with template data but clear name to force user to set a new name
-    setCopyTemplateRestaurant({
-      name: '',
-      address: restaurant.address,
-      city: restaurant.city,
-      storeType: restaurant.storeType,
-      manager: restaurant.manager,
-      businessHours: typeof restaurant.businessHours === 'string' 
-        ? restaurant.businessHours 
-        : 'Mon-Sun: 9:00 AM - 10:00 PM'
-    })
-    setShowCopyTemplateDialog(true)
-  }
-
   const handleCreateFromTemplate = async () => {
     if (!selectedTemplateStore) return
 
@@ -371,6 +350,7 @@ export function MyRestaurants({ restaurants, onAddRestaurant, onUpdateRestaurant
   }
 
   return (
+    
     <div className="flex flex-col h-full bg-background">
       {/* Header */}
       <div className="px-8 py-6">
