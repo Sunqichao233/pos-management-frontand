@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Plus, MapPin, Clock, User, TrendingUp, ShoppingBag, Star, MoreVertical, Copy, Edit, Trash2, Power, Upload, Store, ExternalLink, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -61,11 +62,11 @@ interface MyRestaurantsProps {
   onEnterRestaurant?: (restaurantId: string) => void
 }
 
-export default function MyRestaurants({ 
+function MyRestaurants({ 
   restaurants = [],
-   onAddRestaurant, 
-   onUpdateRestaurant, 
-   onDeleteRestaurant,
+  onAddRestaurant, 
+  onUpdateRestaurant, 
+  onDeleteRestaurant,
   onToggleStatus, 
   onNavigateToAddRestaurant, 
   onEnterRestaurant 
@@ -823,5 +824,63 @@ export default function MyRestaurants({
         </DialogContent>
       </Dialog>
     </div>
+  )
+}
+
+// 添加默认导出
+export default function RestaurantsPage() {
+  const router = useRouter()
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([
+    {
+      id: '1',
+      name: 'Sample Restaurant',
+      status: 'active',
+      address: '123 Main St',
+      city: 'Sample City',
+      businessHours: '9:00 AM - 10:00 PM',
+      manager: 'John Doe',
+      storeType: 'full_service',
+      kpis: {
+        todaysSales: 5000,
+        todaysOrders: 50,
+        rating: 4.5,
+        activeStaff: 8
+      }
+    }
+  ])
+
+  const handleAddRestaurant = (restaurant: Restaurant) => {
+    setRestaurants(prev => [...prev, restaurant])
+  }
+
+  const handleUpdateRestaurant = (restaurant: Restaurant) => {
+    setRestaurants(prev => prev.map(r => r.id === restaurant.id ? restaurant : r))
+  }
+
+  const handleDeleteRestaurant = (restaurantId: string) => {
+    setRestaurants(prev => prev.filter(r => r.id !== restaurantId))
+  }
+
+  const handleToggleStatus = (restaurantId: string) => {
+    setRestaurants(prev => prev.map(r => 
+      r.id === restaurantId 
+        ? { ...r, status: r.status === 'active' ? 'inactive' : 'active' }
+        : r
+    ))
+  }
+
+  const handleEnterRestaurant = (restaurantId: string) => {
+    router.push(`/restaurants/${restaurantId}`)
+  }
+
+  return (
+    <MyRestaurants
+      restaurants={restaurants}
+      onAddRestaurant={handleAddRestaurant}
+      onUpdateRestaurant={handleUpdateRestaurant}
+      onDeleteRestaurant={handleDeleteRestaurant}
+      onToggleStatus={handleToggleStatus}
+      onEnterRestaurant={handleEnterRestaurant}
+    />
   )
 }
