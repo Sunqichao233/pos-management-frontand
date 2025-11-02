@@ -1,3 +1,4 @@
+"use client"
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react"
 import { translations, TranslationKey } from "./translations"
 
@@ -17,14 +18,19 @@ interface LanguageProviderProps {
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(() => {
-    // Get saved language from localStorage, default to English
-    const saved = localStorage.getItem("app-language")
-    return (saved === "zh" || saved === "en") ? saved : "en"
+    // SSR 安全：仅在浏览器环境访问 localStorage
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("app-language")
+      return (saved === "zh" || saved === "en") ? saved : "en"
+    }
+    return "en"
   })
 
   useEffect(() => {
-    // Save language preference to localStorage
-    localStorage.setItem("app-language", language)
+    // Save language preference to localStorage (仅浏览器)
+    if (typeof window !== "undefined") {
+      localStorage.setItem("app-language", language)
+    }
   }, [language])
 
   const setLanguage = (lang: Language) => {
