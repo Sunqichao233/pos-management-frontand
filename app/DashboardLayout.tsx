@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { DashboardSidebar } from './DashboardSidebar'
 import { LanguageProvider } from './LanguageContext'
 import { GlobalDataProvider } from './GlobalDataContext'
@@ -14,8 +14,12 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter()
+  const pathname = usePathname()
   const [currentPage, setCurrentPage] = useState('dashboard')
   const [currentRestaurantId, setCurrentRestaurantId] = useState<string | null>(null)
+
+  // 在登录相关页面隐藏侧边栏，仅渲染内容
+  const isAuthRoute = pathname?.startsWith('/login')
 
   const handlePageChange = (page: string) => {
     setCurrentPage(page)
@@ -47,19 +51,27 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <LanguageProvider>
       <GlobalDataProvider>
-        <SidebarProvider>
-          <div className="flex h-screen w-full">
-            <DashboardSidebar
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              onRestaurantChange={handleRestaurantChange}
-            />
-            <main className="flex-1 overflow-auto">
-              {children}
-            </main>
-          </div>
-          <Toaster />
-        </SidebarProvider>
+        {/* 登录页不显示侧边栏，其它页面保持原布局 */}
+        {isAuthRoute ? (
+          <>
+            {children}
+            <Toaster />
+          </>
+        ) : (
+          <SidebarProvider>
+            <div className="flex h-screen w-full">
+              <DashboardSidebar
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+                onRestaurantChange={handleRestaurantChange}
+              />
+              <main className="flex-1 overflow-auto">
+                {children}
+              </main>
+            </div>
+            <Toaster />
+          </SidebarProvider>
+        )}
       </GlobalDataProvider>
     </LanguageProvider>
   )
